@@ -1,7 +1,7 @@
-package com.ameermomen.lostandfind;
+package com.ameermomen.lostandfind.main;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.ameermomen.lostandfind.R;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
