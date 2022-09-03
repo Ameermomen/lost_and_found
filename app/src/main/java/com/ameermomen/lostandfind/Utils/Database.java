@@ -1,8 +1,13 @@
 package com.ameermomen.lostandfind.Utils;
 
+import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ameermomen.lostandfind.interfaces.AuthCallBack;
+import com.ameermomen.lostandfind.interfaces.PostCallBack;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -10,12 +15,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class Database {
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private FirebaseStorage mStorage;
     private AuthCallBack authCallBack;
+    private PostCallBack postCallBack;
 
     public Database(){
         mAuth = FirebaseAuth.getInstance();
@@ -25,6 +33,10 @@ public class Database {
 
     public void setAuthCallBack(AuthCallBack authCallBack){
         this.authCallBack = authCallBack;
+    }
+
+    public void setPostCallBack(PostCallBack postCallBack){
+        this.postCallBack = postCallBack;
     }
 
     public void logout() {
@@ -76,5 +88,29 @@ public class Database {
 
     public FirebaseUser getCurrentUser(){
         return this.mAuth.getCurrentUser();
+    }
+
+    public void uploadPost(Post post, Uri uri) {
+        mDatabase.getReference("Posts").push().setValue(post)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            StorageReference storageReference = mStorage.getReference("lost_items_images/"+post.getImgUrl());
+                            UploadTask uploadImageTask = storageReference.putFile(uri);
+                            while (!uploadImageTask.isComplete());
+
+                            if(uploadImageTask.isSuccessful()){
+                                postCallBack.uploadPostComplete(true, "");
+                            }else{
+                                postCallBack.uploadPostComplete(false, "Failed to upload post picture");
+                            }
+
+                        }else{
+                            postCallBack.uploadPostComplete(false, task.getException().getMessage());
+                        }
+                    }
+                });
+
     }
 }
