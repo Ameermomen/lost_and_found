@@ -1,6 +1,6 @@
 package com.ameermomen.lostandfind.Utils;
 
-public class Post extends Uid{
+public class Post extends Uid implements Comparable<Post>{
     private String title;
     private ItemLocation location;
     private String imgUrl;
@@ -52,5 +52,15 @@ public class Post extends Uid{
     public Post setCreate_time(long createTime) {
         this.createTime = createTime;
         return this;
+    }
+
+    @Override
+    public int compareTo(Post o) {
+        if(this.createTime > o.getCreateTime())
+            return 1;
+        if(this.createTime < o.getCreateTime())
+            return -1;
+        return 0;
+
     }
 }

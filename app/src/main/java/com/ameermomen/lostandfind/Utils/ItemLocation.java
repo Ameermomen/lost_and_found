@@ -34,4 +34,11 @@ public class ItemLocation {
         this.latitude = latitude;
         return this;
     }
+
+    public double getDist(ItemLocation other){
+        double dx = this.latitude - other.latitude;
+        double dy = this.longitude - other.longitude;
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+    }
 }

@@ -1,10 +1,8 @@
 package com.ameermomen.lostandfind.Utils;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.ameermomen.lostandfind.interfaces.AuthCallBack;
 import com.ameermomen.lostandfind.interfaces.PostCallBack;
@@ -13,10 +11,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Database {
     private FirebaseAuth mAuth;
@@ -112,5 +116,43 @@ public class Database {
                     }
                 });
 
+    }
+
+
+    public void fetchLostItems(){
+        mDatabase.getReference("Posts").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<LostItemPost> posts = new ArrayList<>();
+                for(DataSnapshot snap : snapshot.getChildren()){
+                    LostItemPost lostItemPost = new LostItemPost();
+                    //fetch post info
+                    lostItemPost.setPost(snap.getValue(Post.class));
+                    //fetch post image
+                    String imagePath = "lost_items_images/" + lostItemPost.getPost().getImgUrl();
+                    Task<Uri> downloadImageTask = mStorage.getReference(imagePath).getDownloadUrl();
+
+                    //fetch user info
+                    String path = "Users/" + lostItemPost.getPost().getUserUid();
+                    Task<DataSnapshot> fetchUserTask =  mDatabase.getReference(path).get();
+
+                    //wait until fetch image and user info finish
+                    while(!fetchUserTask.isComplete() || !downloadImageTask.isComplete());
+
+                    lostItemPost.setUser(fetchUserTask.getResult().getValue(User.class));
+                    lostItemPost.getPost().setImgUrl(downloadImageTask.getResult().toString());
+                    posts.add(lostItemPost);
+                }
+
+                Collections.reverse(posts);//sort by find time (new first)
+                postCallBack.fetchLostItems(posts);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                ArrayList<LostItemPost> posts = new ArrayList<>();
+                postCallBack.fetchLostItems(posts);
+            }
+        });
     }
 }

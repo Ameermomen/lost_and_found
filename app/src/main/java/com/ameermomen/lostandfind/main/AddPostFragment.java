@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.ameermomen.lostandfind.R;
 import com.ameermomen.lostandfind.Utils.Database;
 import com.ameermomen.lostandfind.Utils.ItemLocation;
+import com.ameermomen.lostandfind.Utils.LostItemPost;
 import com.ameermomen.lostandfind.Utils.Post;
 import com.ameermomen.lostandfind.Utils.UtilsFunctions;
 import com.ameermomen.lostandfind.interfaces.PostCallBack;
@@ -84,14 +85,6 @@ public class AddPostFragment extends Fragment {
 
     private void initVars() {
 
-        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-        }
-
-        if(ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CAMERA}, 101);
-        }
-
         getCurrentLocation();
 
         db.setPostCallBack(new PostCallBack() {
@@ -107,9 +100,10 @@ public class AddPostFragment extends Fragment {
             }
 
             @Override
-            public void fetchPostsComplete(ArrayList<Post> posts) {
+            public void fetchLostItems(ArrayList<LostItemPost> lostItemPosts) {
 
             }
+
         });
 
 
