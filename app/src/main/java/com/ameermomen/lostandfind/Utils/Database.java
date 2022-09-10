@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -92,6 +93,47 @@ public class Database {
 
     public FirebaseUser getCurrentUser(){
         return this.mAuth.getCurrentUser();
+    }
+
+    public void updateUserProfileImage(String imageName, Uri uri){
+        StorageReference ref = mStorage.getReference("profiles_images/"+imageName);
+        ref.putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+                     ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                         @Override
+                         public void onComplete(@NonNull Task<Uri> task) {
+                             FirebaseUser user = getCurrentUser();
+                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                             .setPhotoUri(task.getResult())
+                             .build();
+                             user.updateProfile(profileUpdates);
+                         }
+                     });
+                }
+
+            }
+        });
+
+    }
+
+    public void getUserInfo(String uid){
+        mDatabase.getReference("Users/"+uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                if(user != null)
+                    user.setUid(uid);
+
+                authCallBack.fetchUserInfoComplete(user);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void uploadPost(Post post, Uri uri) {

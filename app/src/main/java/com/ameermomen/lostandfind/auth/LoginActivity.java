@@ -53,6 +53,11 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void fetchUserInfoComplete(User user) {
+
+            }
         });
 
         if(database.getCurrentUser() != null){

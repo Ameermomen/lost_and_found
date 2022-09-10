@@ -75,14 +75,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         homeFragment = new HomeFragment();
-        homeFragment.setActivity(this);
+        homeFragment.setActivity(MainActivity.this);
         getSupportFragmentManager().beginTransaction().add(R.id.main_frame_home, homeFragment).commit();
 
         addPostFragment = new AddPostFragment();
-        addPostFragment.setActivity(this);
+        addPostFragment.setActivity(MainActivity.this);
         getSupportFragmentManager().beginTransaction().add(R.id.main_frame_add_post, addPostFragment).commit();
 
         profileFragment = new ProfileFragment();
+        profileFragment.setActivity(MainActivity.this);
         getSupportFragmentManager().beginTransaction().add(R.id.main_frame_profile, profileFragment).commit();
 
         profileFrame.setVisibility(View.INVISIBLE);

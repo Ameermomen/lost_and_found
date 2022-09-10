@@ -63,6 +63,11 @@ public class SignupActivity extends AppCompatActivity {
             public void onLoginComplete(boolean status, String msg) {
 
             }
+
+            @Override
+            public void fetchUserInfoComplete(User user) {
+
+            }
         });
 
         signup_BTN_signup.setOnClickListener(new View.OnClickListener() {
