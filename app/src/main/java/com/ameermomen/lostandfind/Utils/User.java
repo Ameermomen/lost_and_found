@@ -2,7 +2,9 @@ package com.ameermomen.lostandfind.Utils;
 
 import com.google.firebase.database.Exclude;
 
-public class User extends Uid{
+import java.io.Serializable;
+
+public class User extends Uid implements Serializable {
     private String name;
     private String phone;
     private String email;

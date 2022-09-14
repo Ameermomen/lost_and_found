@@ -138,8 +138,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(new Intent(activity, profileDetailsUpdateActivity.class));
-                intent.putExtra("name", currentUser.getName());
-                intent.putExtra("phone", currentUser.getPhone());
+                intent.putExtra("user", currentUser);
                 startActivity(intent);
             }
         });

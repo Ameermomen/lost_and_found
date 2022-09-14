@@ -137,27 +137,18 @@ public class Database {
     }
 
     public void uploadPost(Post post, Uri uri) {
-        mDatabase.getReference("Posts").push().setValue(post)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            StorageReference storageReference = mStorage.getReference("lost_items_images/"+post.getImgUrl());
-                            UploadTask uploadImageTask = storageReference.putFile(uri);
-                            while (!uploadImageTask.isComplete());
 
-                            if(uploadImageTask.isSuccessful()){
-                                postCallBack.uploadPostComplete(true, "");
-                            }else{
-                                postCallBack.uploadPostComplete(false, "Failed to upload post picture");
-                            }
-
-                        }else{
-                            postCallBack.uploadPostComplete(false, task.getException().getMessage());
-                        }
-                    }
-                });
-
+        mStorage.getReference("lost_items_images/"+post.getImgUrl()).putFile(uri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                if(task.isSuccessful()){
+                    mDatabase.getReference("Posts").push().setValue(post);
+                    postCallBack.uploadPostComplete(true, "");
+                }else {
+                    postCallBack.uploadPostComplete(false, "Failed to upload post picture");
+                }
+            }
+        });
     }
 
 

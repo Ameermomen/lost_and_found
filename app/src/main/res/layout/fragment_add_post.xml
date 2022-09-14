@@ -90,8 +90,9 @@
 
                 <ImageView
                     android:id="@+id/frag_add_post_IV_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_width="250dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_height="200dp"
                     android:layout_below="@id/frag_add_post_txt_imageTitle"
                     android:paddingHorizontal="20dp"
                     android:scaleType="fitXY"
@@ -112,7 +113,7 @@
                     android:id="@+id/frag_add_post_BTN_add_post"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/frag_add_post_IV_image"
+                    android:layout_below="@+id/frag_add_post_progress"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/primary"
