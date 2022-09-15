@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ameermomen.lostandfind.R;
@@ -22,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialButton login_BTN_login;
     private Button login_BTN_createAccount;
     private Database database;
+    private ProgressBar login_PB_loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
+
+                login_PB_loading.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -70,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
                 User user = new User()
                         .setEmail(login_TIL_email.getEditText().getText().toString())
                         .setPassword(login_TIL_password.getEditText().getText().toString());
-
+                login_PB_loading.setVisibility(View.VISIBLE);
                 database.login(user);
             }
         });
@@ -93,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
         login_TIL_password = findViewById(R.id.login_TIL_password);
         login_BTN_login = findViewById(R.id.login_BTN_login);
         login_BTN_createAccount = findViewById(R.id.login_BTN_createAccount);
+        login_PB_loading = findViewById(R.id.login_PB_loading);
     }
 
 }

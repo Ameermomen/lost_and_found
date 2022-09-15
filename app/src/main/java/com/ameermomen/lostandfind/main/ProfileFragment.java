@@ -38,7 +38,7 @@ public class ProfileFragment extends Fragment {
     private Activity activity;
     private ImageView profile_image;
     private FloatingActionButton profile_FBTN_uploadImage;
-    private LinearLayout profile_LL_editDetails, profile_LL_myPosts, profile_LL_logout;
+    private LinearLayout profile_LL_editDetails, profile_LL_logout;
     private TextView profile_TV_name, profile_TV_phone, profile_TV_email;
     private Database db;
     private User currentUser;
@@ -66,7 +66,6 @@ public class ProfileFragment extends Fragment {
         profile_image = root.findViewById(R.id.profile_image);
         profile_FBTN_uploadImage = root.findViewById(R.id.profile_FBTN_uploadImage);
         profile_LL_editDetails = root.findViewById(R.id.profile_LL_editDetails);
-        profile_LL_myPosts = root.findViewById(R.id.profile_LL_myPosts);
         profile_LL_logout = root.findViewById(R.id.profile_LL_logout);
         profile_TV_name = root.findViewById(R.id.profile_TV_name);
         profile_TV_phone = root.findViewById(R.id.profile_TV_phone);

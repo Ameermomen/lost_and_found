@@ -1,6 +1,8 @@
 package com.ameermomen.lostandfind.main;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.ameermomen.lostandfind.R;
 import com.ameermomen.lostandfind.Utils.Database;
@@ -28,6 +32,7 @@ public class HomeFragment extends Fragment {
     private Database db;
     private ArrayList<LostItemPost> posts;
     private RecyclerView frag_home_RV_lostItems;
+    private ProgressBar frag_home_PB_loading;
     public HomeFragment() {
        db = new Database();
     }
@@ -48,9 +53,11 @@ public class HomeFragment extends Fragment {
 
     private void findViews(View root) {
         frag_home_RV_lostItems = root.findViewById(R.id.frag_home_RV_lostItems);
+        frag_home_PB_loading = root.findViewById(R.id.frag_home_PB_loading);
     }
 
     private void initVars() {
+        frag_home_PB_loading.setVisibility(View.VISIBLE);
         db.setPostCallBack(new PostCallBack() {
             @Override
             public void uploadPostComplete(boolean status, String msg) {
@@ -86,13 +93,27 @@ public class HomeFragment extends Fragment {
                 mapIntent.setPackage("com.google.android.apps.maps");
                 startActivity(mapIntent);
             }
+
+            @Override
+            public void onRemovePress(LostItemPost post) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setMessage("Do you want to remove the post ?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                db.removePost(post);
+                            }
+                        })
+                        .setNegativeButton("No", null).show();
+
+            }
         });
 
         frag_home_RV_lostItems.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         frag_home_RV_lostItems.setHasFixedSize(true);
         frag_home_RV_lostItems.setItemAnimator(new DefaultItemAnimator());
         frag_home_RV_lostItems.setAdapter(lostItemAdapter);
-
-
+        frag_home_PB_loading.setVisibility(View.INVISIBLE);
     }
+
+
 }

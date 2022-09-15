@@ -6,5 +6,5 @@ public interface LostItemCallBack {
 
     void onCallButtonPress(LostItemPost post);
     void onMapButtonPress(LostItemPost post);
-
+    void onRemovePress(LostItemPost post);
 }

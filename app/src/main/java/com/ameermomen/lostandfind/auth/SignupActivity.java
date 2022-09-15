@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class SignupActivity extends AppCompatActivity {
     private MaterialButton signup_BTN_signup;
     private TextView signup_TV_msg;
     private Database database;
+    private ProgressBar signup_PB_loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +45,13 @@ public class SignupActivity extends AppCompatActivity {
                     database.updateUserInfo(user);
                 }else{
                     Toast.makeText(SignupActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    signup_PB_loading.setVisibility(View.INVISIBLE);
                 }
             }
 
             @Override
             public void updateUserInfoComplete(boolean status, String msg) {
+                signup_PB_loading.setVisibility(View.INVISIBLE);
                 if(status){
                     database.logout();
                     Toast.makeText(SignupActivity.this,
@@ -57,6 +61,7 @@ public class SignupActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(SignupActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
+
             }
 
             @Override
@@ -73,7 +78,17 @@ public class SignupActivity extends AppCompatActivity {
         signup_BTN_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!checkInputs()) return;
+                if(!checkInputs()) {
+                    Toast.makeText(SignupActivity.this, "You should fill all fields!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(!signup_TIL_confirmPassword.getEditText().getText().toString().equals(signup_TIL_password.getEditText().getText().toString())){
+                    Toast.makeText(SignupActivity.this, "confirm password not match password! ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                signup_PB_loading.setVisibility(View.VISIBLE);
                 User user = getUser();
                 database.createNewUser(user);
             }
@@ -88,10 +103,26 @@ public class SignupActivity extends AppCompatActivity {
         signup_TIL_confirmPassword = findViewById(R.id.signup_TIL_confirmPassword);
         signup_BTN_signup = findViewById(R.id.signup_BTN_signup);
         signup_TV_msg = findViewById(R.id.signup_TV_msg);
-
+        signup_PB_loading = findViewById(R.id.signup_PB_loading);
     }
 
     private boolean checkInputs(){
+        if(signup_TIL_fullName.getEditText().getText().toString().equals("")){
+            return false;
+        }
+        if(signup_TIL_email.getEditText().getText().toString().equals("")){
+            return false;
+        }
+        if(signup_TIL_phone.getEditText().getText().toString().equals("")){
+            return false;
+        }
+        if(signup_TIL_password.getEditText().getText().toString().equals("")){
+            return false;
+        }
+        if(signup_TIL_confirmPassword.getEditText().getText().toString().equals("")){
+            return false;
+        }
+
         return true;
     }
 

@@ -116,7 +116,15 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
-
+    <ProgressBar
+        android:id="@+id/signup_PB_loading"
+        android:visibility="invisible"
+        android:layout_below="@+id/signup_TIL_confirmPassword"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signup_BTN_signup"
         android:layout_width="match_parent"
@@ -141,4 +149,6 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
         />
+
+
 </RelativeLayout>

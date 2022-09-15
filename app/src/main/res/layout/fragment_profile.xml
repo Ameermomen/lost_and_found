@@ -121,47 +121,6 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/profile_CV_myPosts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_CV_editDetails"
-            android:layout_marginTop="10dp"
-            app:cardElevation="1dp"
-
-            >
-
-            <LinearLayout
-                android:id="@+id/profile_LL_myPosts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:paddingVertical="10dp"
-                >
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_baseline_post_add_24" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="5"
-                    android:text="My Posts"
-                    android:textColor="@color/text"
-                    android:textSize="20sp" />
-
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_baseline_navigate_next_24" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
             android:id="@+id/profile_CV_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

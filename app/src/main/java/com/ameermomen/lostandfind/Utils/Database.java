@@ -161,6 +161,7 @@ public class Database {
                     LostItemPost lostItemPost = new LostItemPost();
                     //fetch post info
                     lostItemPost.setPost(snap.getValue(Post.class));
+                    lostItemPost.getPost().setUid(snap.getKey());
                     //fetch post image
                     String imagePath = "lost_items_images/" + lostItemPost.getPost().getImgUrl();
                     Task<Uri> downloadImageTask = mStorage.getReference(imagePath).getDownloadUrl();
@@ -172,7 +173,9 @@ public class Database {
                     //wait until fetch image and user info finish
                     while(!fetchUserTask.isComplete() || !downloadImageTask.isComplete());
 
-                    lostItemPost.setUser(fetchUserTask.getResult().getValue(User.class));
+                    User user = fetchUserTask.getResult().getValue(User.class);
+                    user.setUid(lostItemPost.getPost().getUserUid());
+                    lostItemPost.setUser(user);
                     lostItemPost.getPost().setImgUrl(downloadImageTask.getResult().toString());
                     posts.add(lostItemPost);
                 }
@@ -187,5 +190,9 @@ public class Database {
                 postCallBack.fetchLostItems(posts);
             }
         });
+    }
+
+    public void removePost(LostItemPost post) {
+        this.mDatabase.getReference("Posts/"+post.getPost().getUid()).removeValue();
     }
 }

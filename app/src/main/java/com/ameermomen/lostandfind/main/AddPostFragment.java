@@ -21,10 +21,8 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +41,6 @@ import com.ameermomen.lostandfind.interfaces.PostCallBack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,7 +83,6 @@ public class AddPostFragment extends Fragment {
     private void initVars() {
 
         getCurrentLocation();
-
         db.setPostCallBack(new PostCallBack() {
             @Override
             public void uploadPostComplete(boolean status, String msg) {
@@ -117,6 +113,12 @@ public class AddPostFragment extends Fragment {
         frag_add_post_BTN_add_post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!check()){
+                    Toast.makeText(activity, "You should fill all the fields!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String imageUrl = db.getCurrentUser().getUid() + generateRandomNumber() + "." + UtilsFunctions.getFileExtension(activity, imageUri);
                 Post post = new Post()
                         .setCreate_time(new Date().getTime())
@@ -141,11 +143,22 @@ public class AddPostFragment extends Fragment {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
+    private boolean check() {
+        if(frag_add_post_TIL_title.getEditText().getText().toString().equals("")){
+            return false;
+        }
+        if(frag_add_post_TIL_location.getEditText().getText().toString().equals("")){
+            return false;
+        }
+        return true;
+    }
+
     private int generateRandomNumber(){
         Random rnd = new Random();
         int num = rnd.nextInt(9999999) + 100000;
         return num;
     }
+
     private void getCurrentLocation() {
         Geocoder geoCoder = new Geocoder(activity, Locale.getDefault()); //it is Geocoder
         Location locationGPS = getLastKnownLocation();//locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);

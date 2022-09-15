@@ -57,13 +57,23 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <ProgressBar
+        android:id="@+id/login_PB_loading"
+        android:layout_below="@+id/login_TIL_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        style="?android:attr/progressBarStyle"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_BTN_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login_TIL_password"
+        android:layout_below="@+id/login_PB_loading"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
         android:backgroundTint="@color/primary"
         android:padding="10dp"
         android:text="Login"
@@ -72,6 +82,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:cornerRadius="30dp" />
+
 
     <Button
         android:id="@+id/login_BTN_createAccount"
@@ -85,4 +96,6 @@
         android:textAllCaps="false"
         android:textSize="16sp"
         />
+
+
 </RelativeLayout>
