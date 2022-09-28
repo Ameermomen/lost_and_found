@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private ImageView profile_image;
     private FloatingActionButton profile_FBTN_uploadImage;
     private LinearLayout profile_LL_editDetails, profile_LL_logout;
-    private TextView profile_TV_name, profile_TV_phone, profile_TV_email;
+    private TextView profile_TV_name, profile_TV_score, profile_TV_email;
     private Database db;
     private User currentUser;
     public ProfileFragment() {
@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment {
         profile_LL_editDetails = root.findViewById(R.id.profile_LL_editDetails);
         profile_LL_logout = root.findViewById(R.id.profile_LL_logout);
         profile_TV_name = root.findViewById(R.id.profile_TV_name);
-        profile_TV_phone = root.findViewById(R.id.profile_TV_phone);
+        profile_TV_score = root.findViewById(R.id.profile_TV_score);
         profile_TV_email = root.findViewById(R.id.profile_TV_email);
 
     }
@@ -98,7 +98,7 @@ public class ProfileFragment extends Fragment {
                 currentUser = user;
                 profile_TV_name.setText(user.getName());
                 profile_TV_email.setText(user.getEmail());
-                profile_TV_phone.setText(user.getPhone());
+                profile_TV_score.setText(user.getScore() + "");
 
             }
         });

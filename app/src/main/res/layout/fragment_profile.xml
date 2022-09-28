@@ -71,7 +71,7 @@
             android:textSize="24sp" />
 
         <TextView
-            android:id="@+id/profile_TV_phone"
+            android:id="@+id/profile_TV_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_TV_email"
@@ -84,7 +84,7 @@
             android:id="@+id/profile_CV_editDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_TV_phone"
+            android:layout_below="@+id/profile_TV_score"
             android:layout_marginTop="20dp"
             app:cardElevation="1dp">
 

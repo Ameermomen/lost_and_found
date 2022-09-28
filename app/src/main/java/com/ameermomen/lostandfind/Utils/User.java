@@ -9,15 +9,19 @@ public class User extends Uid implements Serializable {
     private String phone;
     private String email;
     private String password;
+    private int score;
 
-    public User(String name, String phone, String email, String password) {
+    public User(String name, String phone, String email, String password, int score) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.password = password;
+        this.score = score;
     }
 
-    public User(){}
+    public User(){
+        this.score = 0;
+    }
 
     public String getName() {
         return name;
@@ -55,4 +59,14 @@ public class User extends Uid implements Serializable {
         this.password = password;
         return this;
     }
+
+    public User setScore(int score) {
+        this.score = score;
+        return this;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
 }

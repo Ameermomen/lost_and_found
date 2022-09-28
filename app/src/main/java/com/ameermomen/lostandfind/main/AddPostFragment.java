@@ -36,7 +36,9 @@ import com.ameermomen.lostandfind.Utils.Database;
 import com.ameermomen.lostandfind.Utils.ItemLocation;
 import com.ameermomen.lostandfind.Utils.LostItemPost;
 import com.ameermomen.lostandfind.Utils.Post;
+import com.ameermomen.lostandfind.Utils.User;
 import com.ameermomen.lostandfind.Utils.UtilsFunctions;
+import com.ameermomen.lostandfind.interfaces.AuthCallBack;
 import com.ameermomen.lostandfind.interfaces.PostCallBack;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
@@ -52,6 +54,7 @@ import java.util.Random;
 
 
 public class AddPostFragment extends Fragment {
+    private static final int SCORE_PER_POST = 200;
 
     private TextInputLayout frag_add_post_TIL_title, frag_add_post_TIL_location;
     private MaterialButton frag_add_post_BTN_current_location, frag_add_post_BTN_add_post;
@@ -61,9 +64,11 @@ public class AddPostFragment extends Fragment {
     private ItemLocation location;
     private Database db;
     private ProgressBar progressBar;
+    private User currentUser;
 
     public AddPostFragment() {
         db = new Database();
+
     }
 
     public void setActivity(Activity activity){
@@ -83,11 +88,36 @@ public class AddPostFragment extends Fragment {
     private void initVars() {
 
         getCurrentLocation();
+        db.setAuthCallBack(new AuthCallBack() {
+            @Override
+            public void onCreateAccountComplete(boolean status, String msg) {
+
+            }
+
+            @Override
+            public void updateUserInfoComplete(boolean status, String msg) {
+
+            }
+
+            @Override
+            public void onLoginComplete(boolean status, String msg) {
+
+            }
+
+            @Override
+            public void fetchUserInfoComplete(User user) {
+                currentUser = user;
+            }
+        });
+
+
         db.setPostCallBack(new PostCallBack() {
             @Override
             public void uploadPostComplete(boolean status, String msg) {
                 if(status){
                     Toast.makeText(activity, "Post upload success!", Toast.LENGTH_SHORT).show();
+                    currentUser.setScore(currentUser.getScore() + SCORE_PER_POST);
+                    db.updateUserInfo(currentUser);
                     cleanScreen();
                 }else{
                     Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
@@ -102,6 +132,7 @@ public class AddPostFragment extends Fragment {
 
         });
 
+        db.getUserInfo(db.getCurrentUser().getUid());
 
         frag_add_post_IV_image.setOnClickListener(new View.OnClickListener() {
             @Override
