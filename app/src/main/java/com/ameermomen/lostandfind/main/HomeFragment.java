@@ -16,11 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.ameermomen.lostandfind.R;
 import com.ameermomen.lostandfind.Utils.Database;
 import com.ameermomen.lostandfind.Utils.LostItemPost;
+import com.ameermomen.lostandfind.Utils.User;
+import com.ameermomen.lostandfind.interfaces.AuthCallBack;
 import com.ameermomen.lostandfind.interfaces.LostItemCallBack;
 import com.ameermomen.lostandfind.interfaces.PostCallBack;
 
@@ -28,11 +29,14 @@ import java.util.ArrayList;
 
 
 public class HomeFragment extends Fragment {
+    private final int SCORE = 300;
     private Activity activity;
     private Database db;
     private ArrayList<LostItemPost> posts;
     private RecyclerView frag_home_RV_lostItems;
     private ProgressBar frag_home_PB_loading;
+    private User currentUser;
+
     public HomeFragment() {
        db = new Database();
     }
@@ -71,7 +75,30 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        db.setAuthCallBack(new AuthCallBack() {
+            @Override
+            public void onCreateAccountComplete(boolean status, String msg) {
+
+            }
+
+            @Override
+            public void updateUserInfoComplete(boolean status, String msg) {
+
+            }
+
+            @Override
+            public void onLoginComplete(boolean status, String msg) {
+
+            }
+
+            @Override
+            public void fetchUserInfoComplete(User user) {
+                currentUser = user;
+            }
+        });
         db.fetchLostItems();
+        if(db.getCurrentUser() != null)
+            db.getUserInfo(db.getCurrentUser().getUid());
     }
 
     public void setLostItems(){
@@ -101,6 +128,8 @@ public class HomeFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 db.removePost(post);
+                                currentUser.setScore(currentUser.getScore() + SCORE);
+                                db.updateUserInfo(currentUser);
                             }
                         })
                         .setNegativeButton("No", null).show();
